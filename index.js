@@ -59,11 +59,17 @@ app.get('/movies/directors/:name', (req, res) => {
   res.send('successful GET request returning data about director');
 });
 
+// GET List of users
+app.get('/users', (req, res) => {
+  res.json(users);
+});
+
 //CREATE new user
 app.post('/users', (req, res) => {
+ //res.send('new user is created');
   let newUser = req.body;
 
-  if (!newUser.name) {
+  if (!newUser) {
     const message = 'Missing name of user in request body';
     res.status(400).send(message);
   } else {
@@ -74,33 +80,22 @@ app.post('/users', (req, res) => {
 
 //UPDATE info about a user such as username
 app.put('/users/:Username', (req, res) => {
-  let user = users.find((user) => {return user.Username === req.params.Username});
-
-  if (user) {
-    res.status(201).send('user ' + req.params.Username + 'is assigned new username of' + Username);
-  } else {
-    res.status(404).send('user with the name ' + req.params.Username + ' was not found.');
-  }
+  res.send('updated infos about user');
 });
 
 //ADD movie to favorite list
-app.post('users/:Username/movies/:movieID', (req, res) => {
+app.post('/users/:Username/movies/:movieID', (req, res) => {
   res.send('added movie to the list!');
 });
 
 //DELETE movie from favourite List
-app.delete('users/:Username/movies/:movieID', (req, res) => {
+app.delete('/users/:Username/movies/:movieID', (req, res) => {
   res.send('deleted movie from the list!');
 });
 
 //DELETE user account
 app.delete('/users/:id', (req, res) => {
-  let user = users.find((user) => { return user.id === req.params.id });
-
-  if (user) {
-    users = users.filter((obj) => { return obj.id !== req.params.id });
-    res.status(201).send('user ' + req.params.id + ' was deleted.');
-  }
+  res.send('deleted user');
 });
 
 
