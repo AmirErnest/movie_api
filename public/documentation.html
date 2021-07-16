@@ -49,26 +49,42 @@
                    <td scope="row">Return data about a single movie by title</td>
                    <td>GET</td>
                    <td>/movies/[title]</td>
-                   <td>/movies/:title</td>
+                   <td>/movies/:Title</td>
                    <td>none</td>
-                   <td>A JSON object holding data about the title of the requested movie <br><em>e.g.</e> <p>{ <br> 'Genre': { <br> 'Name': 'Crime', <br> 'Description':'About Crime' <br>}, <br> 'Director': {<br> 'Name': 'Columbus', <br> 'Bio': 'About Columbus', <br> 'Birth': '1958' <br> }, <br> 'Actors':[],<br>'_id': 'nummer', <br> 'title': 'Heat', <br> 'Description': 'About the Film'</p></em></td>
+                   <td>A JSON object holding data about the title of the requested movie <br><em>e.g.</e> <p>{ <br> 'Genre': { <br> 'Name': 'Crime', <br> 'Description':'About Crime' <br>}, <br> 'Director': {<br> 'Name': 'Columbus', <br> 'Bio': 'About Columbus', <br> 'Birth': '1958' <br> }, <br> 'Actors':[],<br>'_id': 'unique number', <br> 'title': 'Heat', <br> 'Description': 'About the Film'</p></em></td>
                </tr>
                <tr>
                     <td scope="row">Return data about a genre (description) by name/title (e.g., "Thriller")</td>
                     <td>GET</td>
-                    <td>/movies/genre/[name]</td>
-                    <td>/movies/genre/:name</td>
+                    <td> </td>
+                    <td> </td>
                     <td>none</td>
                     <td>A JSON object holding data about the Genre <em>e.g.</em><br>{ <br>'Name':'Action', <br>'Description': 'Action movies are literally characterized by a whole lot of action. These films are marked by continuous high energy, tremendous impact and a ton of big-budget physical stunts and activities.' <br> }</td>
                </tr>
                <tr>
                     <td scope="row">Return data about a director (bio, birth year, death year) by name</td>
                     <td>GET</td>
-                    <td>/movies/directors/[name]</td>
-                    <td>/movies/directors/:name</td>
+                    <td> </td>
+                    <td> </td>
                     <td>none</td>
                     <td>A Json object holding data about the director. <br><em>e.g.</em> <p> { <br>'name': 'Steven Spilberg' <br> 'Bio': 'Director bio' <br> 'Birth': '1946' <br>}</p></td>
 
+               </tr>
+               <tr>
+                   <td scope="row">Return a list of all users </td>
+                   <td>GET</td>
+                   <td>/users</td>
+                   <td>none</td>
+                   <td>none</td>
+                   <td>A JSON object holding data about all the users</td>
+               </tr>
+               <tr>
+                   <td scope="row">Return data about a single user by username</td>
+                   <td>GET</td>
+                   <td>/users/[username]</td>
+                   <td>/users/:Username</td>
+                   <td>none</td>
+                   <td>A JSON object holding data about the requested user <br><em>e.g.</e> <p>{ <br> 'Username': string <br> 'Password': string <br> 'Email': String <br> 'Birthday': Date </p></em></td>
                </tr>
                <tr>
                    <td scope="row">Allow new users to register</td>
@@ -90,22 +106,22 @@
                    <td scope="row">Allow users to add a movie to their list of favorites</td>
                    <td>POST</td>
                    <td>/users/[Username]/movies/[movieID]</td>
-                   <td>/users/[Username]/movies/:movieID</td>
-                   <td>A JSON object holding data about the movie added <br><em>e.g.</e> <p>{ <br> 'Genre': { <br> 'Name': 'Adventure', <br> 'Description':'About Mountains' <br>}, <br> 'Director': {<br> 'Name': 'Columbus', <br> 'Bio': 'About Columbus', <br> 'Birth': '1958' <br> }, <br> 'Actors':[],<br>'_id': 'nummer', <br> 'title': 'Heat', <br> 'Description': 'About the Film'</p></em></td>
-                   <td>A JSON object holding data about the movie added <br><em>e.g.</e> <p>{ '_id': '60fg43tg3e7e4dfggf4c717b' <br> 'Genre': { <br> 'Name': 'Adventure', <br> 'Description':'About Mountains' <br>}, <br> 'Director': {<br> 'Name': 'Columbus', <br> 'Bio': 'About Columbus', <br> 'Birth': '1958' <br> }, <br> 'Actors':[],<br>'_id': 'nummer', <br> 'title': 'Heat', <br> 'Description': 'About the Film'</p></em></td>
+                   <td>/users/:Username/movies/:movieID</td>
+                   <td><p> a reference ObjectId of the movie to be added ('movieId' in query param. replaced with the 'movie ObjectId')</p></em></td>
+                   <td>A JSON object holding data about the updated favorite list <br> <em>e.g.</em> <br> { <br> 'FavoriteMovies': [ "60ed88c0638cd132fd478bbb", "60eeb2592d9741e075ac0c92" ] <br> '_id': ''60fg43tg3e7e4dfggf4csdf', <br> 'Username': 'Moussa', <br> 'Password': '123456', <br> 'Email': '', 'Birthday': '' <br> } </td>
                </tr>
                <tr>
                    <td scope="row">Allow users to remove a movie from their list of favorites</td>
                    <td>DELETE</td>
                    <td>/users/[Username]/movies/[movieID]</td>
-                   <td>/users/[Username]/movies/:movieID</td>
-                   <td>none</td>
-                   <td>A JSON object holding data about the updated favorite list <br> <em>e.g.</em> <br> { <br> 'FavoriteMovies': [ ] <br> '_id': '', <br> 'Username': 'Moussa', <br> 'Password': '123456', <br> 'Email': '', 'Birthday': '' <br> } </td>
+                   <td>/users/:Username/movies/:movieID</td>
+                   <td>a reference ObjectId of the movie to be removed ('movieId' in query param. replaced with the 'movie ObjectId')</td>
+                   <td>A JSON object holding data about the updated favorite list <br> <em>e.g.</em> <br> { <br> 'FavoriteMovies': [ ] <br> '_id': '60fg43tg3e7e4dfggf4csdf', <br> 'Username': 'Moussa', <br> 'Password': '123456', <br> 'Email': '', 'Birthday': '' <br> } </td>
                 </tr>
                <tr>
-                <td scope="row">Allow existing users to deregister</td>
-                <td>delete</td>
-                <td>/users/:name</td>
+                <td scope="row">Allow existing users to deregister, Deleting user by username</td>
+                <td>DELETE</td>
+                <td>/users/:Username</td>
                 <td>none</td>
                 <td>none</td>
                 <td>A response that the account has been deleted</td>
