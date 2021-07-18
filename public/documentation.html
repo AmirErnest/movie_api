@@ -54,20 +54,20 @@
                    <td>A JSON object holding data about the title of the requested movie <br><em>e.g.</e> <p>{ <br> 'Genre': { <br> 'Name': 'Crime', <br> 'Description':'About Crime' <br>}, <br> 'Director': {<br> 'Name': 'Columbus', <br> 'Bio': 'About Columbus', <br> 'Birth': '1958' <br> }, <br> 'Actors':[],<br>'_id': 'unique number', <br> 'title': 'Heat', <br> 'Description': 'About the Film'</p></em></td>
                </tr>
                <tr>
-                    <td scope="row">Return data about a genre (description) by name/title (e.g., "Thriller")</td>
+                    <td scope="row">Return data about a genre (description) by name/title (e.g., "Thriller") with all movies related</td>
                     <td>GET</td>
-                    <td> </td>
-                    <td> </td>
+                    <td> /movies/genre/[Name]</td>
+                    <td>/movies/genre/:Name </td>
                     <td>none</td>
-                    <td>A JSON object holding data about the Genre <em>e.g.</em><br>{ <br>'Name':'Action', <br>'Description': 'Action movies are literally characterized by a whole lot of action. These films are marked by continuous high energy, tremendous impact and a ton of big-budget physical stunts and activities.' <br> }</td>
+                    <td>A JSON object holding data about the Genre <em>e.g.</em><br>{ <br>'Name':'Action', <br>'Description': 'Action movies are literally characterized by a whole lot of action. These films are marked by continuous high energy, tremendous impact and a ton of big-budget physical stunts and activities.' <br> } <br> Movies related to that genre</td>
                </tr>
                <tr>
-                    <td scope="row">Return data about a director (bio, birth year, death year) by name</td>
+                    <td scope="row">Return data about a director (bio, birth year, death year) by name <br> plus movies by the director</td>
                     <td>GET</td>
-                    <td> </td>
-                    <td> </td>
+                    <td> /movies/director/[Name]</td>
+                    <td> /movies/director/:Name</td>
                     <td>none</td>
-                    <td>A Json object holding data about the director. <br><em>e.g.</em> <p> { <br>'name': 'Steven Spilberg' <br> 'Bio': 'Director bio' <br> 'Birth': '1946' <br>}</p></td>
+                    <td>A Json object holding data about the director. <br><em>e.g.</em> <p> { <br>'name': 'Steven Spilberg' <br> 'Bio': 'Director bio' <br> 'Birth': '1946' <br>} <br> with all movies by director</p></td>
 
                </tr>
                <tr>

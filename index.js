@@ -42,12 +42,12 @@ app.get('/movies/:Title', (req, res) => {
     });
 });
 
-/*
+
 //GET info about a genre by name
 app.get('/movies/genre/:Name', (req, res) => {
-  Movies.Genre.findOne({ Name: req.params.Name})
+  Movies.find({ 'Genre.Name': req.params.Name})
     .then((genre) => {
-      res.json(genre.Description);
+      res.json(genre);
     })
     .catch((err) => {
       console.error(err);
@@ -57,16 +57,15 @@ app.get('/movies/genre/:Name', (req, res) => {
 
 //GET info about a director by name
 app.get('/movies/director/:Name', (req, res) => {
-  Movies.Director.findOne({ Name: req.params.Name})
+  Movies.find({ 'Director.Name': req.params.Name})
     .then((director) => {
-      res.json(director.Bio);
+      res.json(director);
     })
     .catch((err) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
     });
 });
-*/
 
 // Get all users
 app.get('/users', (req, res) => {
