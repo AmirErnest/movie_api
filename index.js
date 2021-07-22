@@ -130,6 +130,7 @@ app.post('/users',
     }
 
   let hashedPassword = Users.hashPassword(req.body.Password); //Hash any password entered by the user when registering before storing it in the MongoDB database
+
   Users.findOne({ Username: req.body.Username }) // Search to see if a user with the requested username already exists
     .then((user) => {
       if (user) {
@@ -175,6 +176,16 @@ app.put('/users/:Username',
   ],
     passport.authenticate('jwt', { session: false }),
     (req, res) => {
+
+      //check the validation object for errors
+      let errors = validationResult(req);
+
+      if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() })
+      }
+
+      let hashedPassword = Users.hashPassword(req.body.Password); //Hash any password entered by the user when registering before storing it in the MongoDB database
+
       Users.findOneAndUpdate({ Username: req.params.Username }, { $set:
         {
           Username: req.body.Username,
