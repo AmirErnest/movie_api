@@ -4,7 +4,11 @@ const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
 
-mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true});
+//the database is only accessible locally on my computer
+/* mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true}); */
+
+// connect database on web
+mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true});
 
 const express = require('express');
 const app = express();
@@ -231,11 +235,11 @@ app.delete('/users/:Username', passport.authenticate('jwt', { session: false }),
 });
 
 
-app.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/', (req, res) => {
   res.send('Hello to my movies list');
 });
 
-app.get('/documentation.html', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/documentation.html', (req, res) => {
   res.sendFile('public/documentation.html', {root: __dirname});
 });
 
