@@ -4,10 +4,14 @@ const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
 
-//the database is only accessible locally on my computer
-/* mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true}); */
+/*
+* the database is only accessible locally on my computer
+* mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true}); 
+*/
 
-// connect database on web
+/* 
+* connect database on web 
+*/
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true});
 
 const express = require('express');
@@ -21,7 +25,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 
 const cors = require('cors');
-app.use(cors()); //it will set the application to allow requests from all origins
+app.use(cors()); /* it will set the application to allow requests from all origins */
 
 let auth = require('./auth')(app);
 
@@ -31,7 +35,9 @@ require('./passport');
 const { check, validationResult } = require('express-validator');
 
 
-// GET List of Movies
+/*
+ * GET List of Movies
+ */
 app.get('/movies', passport.authenticate('jwt', { session:false }), (req, res) => {
   Movies.find()
     .then((movies) => {
@@ -43,8 +49,10 @@ app.get('/movies', passport.authenticate('jwt', { session:false }), (req, res) =
     });
 });
 
-// GET info about a single Movie by title
-//when a movie title has spaces, it is represented by %20
+/*
+* GET info about a single Movie by title
+* when a movie title has spaces, it is represented by %20
+*/
 app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.findOne({ Title: req.params.Title})
     .then((movie) => {
@@ -57,7 +65,9 @@ app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req
 });
 
 
-//GET info about a genre by name
+/*
+* GET info about a genre by name
+*/
 app.get('/movies/genre/:Name', passport.authenticate('jwt', { session:false }), (req, res) => {
   Movies.find({ 'Genre.Name': req.params.Name})
     .then((genre) => {
@@ -69,7 +79,9 @@ app.get('/movies/genre/:Name', passport.authenticate('jwt', { session:false }), 
     });
 });
 
-//GET info about a director by name
+/* 
+*GET info about a director by name
+*/
 app.get('/movies/director/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.find({ 'Director.Name': req.params.Name})
     .then((director) => {
@@ -81,7 +93,9 @@ app.get('/movies/director/:Name', passport.authenticate('jwt', { session: false 
     });
 });
 
-// Get all users
+/*
+* Get all users
+*/
 app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.find()
     .then((users) => {
@@ -93,7 +107,9 @@ app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) =
     });
 });
 
-// Get a user by username
+/*
+* Get a user by username
+*/
 app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOne({ Username: req.params.Username })
     .then((user) => {
@@ -122,16 +138,18 @@ app.post('/users',
     check('Email', 'Email does not appear to be valid').isEmail()
   ], (req, res) => {
 
-    //check the validation object for errors
+    /*
+    * check the validation object for errors
+    */
     let errors = validationResult(req);
 
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() })
     }
 
-  let hashedPassword = Users.hashPassword(req.body.Password); //Hash any password entered by the user when registering before storing it in the MongoDB database
+  let hashedPassword = Users.hashPassword(req.body.Password); /* Hash any password entered by the user when registering before storing it in the MongoDB database */
 
-  Users.findOne({ Username: req.body.Username }) // Search to see if a user with the requested username already exists
+  Users.findOne({ Username: req.body.Username }) /* Search to see if a user with the requested username already exists */
     .then((user) => {
       if (user) {
         return res.status(400).send(req.body.Username + 'already exists');
@@ -156,7 +174,7 @@ app.post('/users',
     });
 });
 
-// Update a user's info, by username
+/* Update a user's info, by username */
 /* We’ll expect JSON in this format
 {
   Username: String,
@@ -177,14 +195,14 @@ app.put('/users/:Username',
     passport.authenticate('jwt', { session: false }),
     (req, res) => {
 
-      //check the validation object for errors
+      /* check the validation object for errors */
       let errors = validationResult(req);
 
       if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() })
       }
 
-      let hashedPassword = Users.hashPassword(req.body.Password); //Hash any password entered by the user when registering before storing it in the MongoDB database
+      let hashedPassword = Users.hashPassword(req.body.Password); /* Hash any password entered by the user when registering before storing it in the MongoDB database */
 
       Users.findOneAndUpdate({ Username: req.params.Username }, { $set:
         {
@@ -194,7 +212,7 @@ app.put('/users/:Username',
           Birthday: req.body.Birthday
         }
       },
-      { new: true }, // This line makes sure that the updated document is returned
+      { new: true }, /* This line makes sure that the updated document is returned */
         (err, updatedUser) => {
           if(err) {
             console.error(err);
@@ -205,12 +223,14 @@ app.put('/users/:Username',
           });
         });
 
-// Add a movie to a user's list of favorites
+/* 
+* Add a movie to a user's list of favorites 
+*/
 app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOneAndUpdate({ Username: req.params.Username }, {
      $push: { FavoriteMovies: req.params.MovieID }
    },
-   { new: true }, // This line makes sure that the updated document is returned
+   { new: true }, /* This line makes sure that the updated document is returned */
   (err, updatedUser) => {
     if (err) {
       console.error(err);
@@ -221,12 +241,12 @@ app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { sess
   });
 });
 
-// Delete a movie from a user's list of favorites
+/* Delete a movie from a user's list of favorites */
 app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOneAndUpdate({ Username: req.params.Username }, {
      $pull: { FavoriteMovies: req.params.MovieID }
    },
-   { new: true }, // This line makes sure that the updated document is returned
+   { new: true }, /* This line makes sure that the updated document is returned */
   (err, updatedUser) => {
     if (err) {
       console.error(err);
@@ -237,7 +257,7 @@ app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { se
   });
 });
 
-// Delete a user by username
+/* Delete a user by username */
 app.delete('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOneAndRemove({ Username: req.params.Username })
     .then((user) => {
@@ -262,14 +282,15 @@ app.get('/documentation.html', (req, res) => {
   res.sendFile('public/documentation.html', {root: __dirname});
 });
 
-// listen for requests locally on my own server/computer
+/* listen for requests locally on my own server/computer */
 /* app.listen(8080, ()=> {
   console.log('I am running!')
 }); */
 
-//hosting the API on a server
-//looks for a pre-configured port number in the environment variable, and,
-//if nothing is found, sets the port to a certain port number
+/* hosting the API on a server
+* looks for a pre-configured port number in the environment variable, and,
+* if nothing is found, sets the port to a certain port number
+*/
 const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0',() => {
   console.log('Listening on port ' + port);
